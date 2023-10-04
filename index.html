@@ -1,0 +1,89 @@
+<html>
+    <head>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>PyScript input&output</title>
+        <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css" />
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>    
+        <py-env>
+            - numpy
+            - matplotlib
+            - pandas
+            - path:
+                - ./my-custom-py-module.py
+          </py-env>   
+    </head>
+  <body>
+    
+    <center>
+        <h1>  </h1>
+        <h1>공학용 계산기 및 그래프 생성기</h1>
+        <div id="plot"></div>
+        <h6 id = "Panbulsik"></h6>
+        test
+        test
+    </center>
+    
+    <py-script output="plot">
+      import matplotlib.pyplot as plt
+      import math
+      import numpy as np
+
+      grapevalue = []
+      def click_event(*args):
+        Normal = Element("Number") <!-- 상수항 -->
+        One = Element("OneNumber") <!-- 일차항 -->
+        Two = Element("TwoNumber") <!-- 이차항 -->
+        Panbbulsick = Element("Panbulsik") <!-- 판별식 들어갈 텍스트 -->
+        print('d')
+        if Normal == "":
+            return
+        try:
+            [a,b,c] = int(Two.value), int(One.value), int(Normal.value)
+        except:
+            print("정상적인 정수를 입력해주세요!")
+            dis()
+    
+        print(a,b,c)
+        try:
+            x1 = (-b + (b**2-4*a*c)**0.5)/(2*a)
+            x2 = (-b - (b**2-4*a*c)**0.5)/(2*a)
+        except:
+            print('ERROR!')
+
+        D = math.pow(b,2) - 4 * a * c
+
+        if D == 0: ## 판별식
+            print("multiple root, 중근") ## 중근
+            Panbbulsick.element.innerText = "multiple root, 중근"
+    
+        if D < 0:
+            print("Imaginary root, 허근") ## 허근
+            Panbbulsick.element.innerText = "Imaginary root, 허근"
+            
+        if D > 0:
+            print("two different root, 서로 다른 두 개의 실근") ## 서로 다른 두 개의 실근
+            Panbbulsick.element.innerText = "two different root, 서로 다른 두 개의 실근"
+
+        x = np.array(range(-20,20)) ## 크기 
+        plt.plot(x,a*(x**2)+b*x+c)
+        fig, ax = plt.subplots()
+        ax.plot(x,a*(x**2)+b*x+c)
+        fig
+        pyscript.write('plot', fig)  
+    </py-script>
+    <main class = "container">
+        <div>
+            이차함수 이차항의 계수
+            <input id = "TwoNumber" type="text" placeholder="정수값을 입력하세요">
+            이차함수 일차항의 계수
+            <input id = "OneNumber" type="text" placeholder="정수값을 입력하세요">
+            이차함수 상수항의 계수
+            <input id = "Number" type="text" placeholder="정수값을 입력하세요"">
+
+            <button id = "add_text" pys-onClick ="click_event">계산하기</button>
+        </div> 
+    </main>  
+  </body>
+</html>
